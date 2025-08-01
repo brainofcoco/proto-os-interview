@@ -105,6 +105,17 @@ class OpenRouterProvider(LLMProvider):
         
         return response
     
+    async def list_model_endpoints(self, model_id: str) -> List[Dict[str, Any]]:
+        """List endpoints for a specific model."""
+        loop = asyncio.get_event_loop()
+        response = await loop.run_in_executor(None, self.client.list_model_endpoints, model_id)
+        
+        if isinstance(response, ErrorResponse):
+            raise ValueError(f"Failed to list model endpoints: {response.message}")
+        
+        # Convert ModelEndpointsResponse to List of Dicts
+        return response.data if hasattr(response, 'data') else []
+    
     async def get_credits(self) -> Optional[Dict[str, Any]]:
         """Get account credit information."""
         loop = asyncio.get_event_loop()

@@ -109,6 +109,13 @@ class UnifiedLLMClient:
         """Get generation information from the current provider."""
         return await self.provider.get_generation(generation_id)
     
+    async def list_model_endpoints(self, model_id: str) -> List[Dict[str, Any]]:
+        """List endpoints for a specific model from the current provider."""
+        if hasattr(self.provider, 'list_model_endpoints'):
+            return await self.provider.list_model_endpoints(model_id)
+        else:
+            raise NotImplementedError(f"Provider {self.provider.provider_name} does not support list_model_endpoints")
+    
     async def get_credits(self) -> Optional[Dict[str, Any]]:
         """Get account credits (if supported by the provider)."""
         return await self.provider.get_credits()
