@@ -1,0 +1,12 @@
+# Core dependencies
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+requests>=2.28.0
+tenacity>=8.0.0
+
+# Testing dependencies
+pytest>=7.0.0
+pytest-mock>=3.10.0
+
+# Optional dependencies for enhanced functionality
+typing-extensions>=4.0.0
