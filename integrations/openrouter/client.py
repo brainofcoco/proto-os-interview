@@ -9,14 +9,15 @@ import json
 import logging
 import requests
 from tenacity import retry, wait_exponential, stop_after_attempt, RetryError
-from typing import List, Dict, Any, Optional, Union, Iterator
+from typing import List, Dict, Any, Optional, Union, Iterator, AsyncIterator
 from dotenv import load_dotenv
 from .models import (
     CompletionRequest, CompletionResponse, ChatCompletionRequest, 
     ChatCompletionResponse, StructuredOutputRequest, ErrorResponse,
-    ModelsResponse, ModelEndpointsResponse, CreditInfo, GenerationInfo,
-    StreamingResponse, ChatMessage
+    ModelsResponse, ModelEndpointsResponse, CreditResponse, GenerationInfo,
+    StreamingResponse, ChatMessage, ModelInfo
 )
+# Provider interface imports removed to avoid circular imports
 
 # Load environment variables
 load_dotenv()
@@ -217,14 +218,14 @@ class OpenRouterClient:
         logger.info(f"Retrieving endpoints for model: {model_id}")
         return self._make_request("GET", f"models/{model_id}/providers", response_model=ModelEndpointsResponse)
     
-    def get_credits(self) -> Union[CreditInfo, ErrorResponse]:
+    def get_credits(self) -> Union[CreditResponse, ErrorResponse]:
         """Get current credit balance and usage information.
         
         Returns:
-            CreditInfo object or ErrorResponse on failure.
+            CreditResponse object or ErrorResponse on failure.
         """
         logger.info("Retrieving credit information")
-        return self._make_request("GET", "auth/key", response_model=CreditInfo)
+        return self._make_request("GET", "credits", response_model=CreditResponse)
     
     def chat_completion_stream(self, request: Union[ChatCompletionRequest, Dict[str, Any]]) -> Iterator[Union[StreamingResponse, ErrorResponse]]:
         """Generate a streaming chat completion.

@@ -200,13 +200,20 @@ class ModelEndpointsResponse(BaseModel):
 
 
 class CreditInfo(BaseModel):
-    """Information about account credits."""
+    """Credit information data."""
     
     model_config = ConfigDict(extra="allow")
     
-    balance: float = Field(..., description="Current credit balance")
-    usage: Optional[float] = Field(None, description="Total usage")
-    limit: Optional[float] = Field(None, description="Credit limit")
+    total_credits: float = Field(..., description="Total credits purchased")
+    total_usage: float = Field(..., description="Total credits used")
+
+
+class CreditResponse(BaseModel):
+    """Response wrapper for credit information."""
+    
+    model_config = ConfigDict(extra="allow")
+    
+    data: CreditInfo = Field(..., description="Credit information")
 
 
 class GenerationInfo(BaseModel):

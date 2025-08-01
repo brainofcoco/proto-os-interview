@@ -101,16 +101,16 @@ def test_get_credits(mock_get, client):
     """Test the get_credits method."""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {
-        "balance": 10.50,
-        "usage": 5.25,
-        "limit": 100.0
+        "data": {
+            "total_credits": 10.50,
+            "total_usage": 5.25
+        }
     }
 
     response = client.get_credits()
 
-    assert response.balance == 10.50
-    assert response.usage == 5.25
-    assert response.limit == 100.0
+    assert response.data.total_credits == 10.50
+    assert response.data.total_usage == 5.25
 
 @patch('requests.get')
 def test_get_generation(mock_get, client):
